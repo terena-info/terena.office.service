@@ -1,0 +1,8 @@
+push:
+	git add .
+	git commit -m "$m"
+	git push
+
+build:
+	go build main.go
+	./main
