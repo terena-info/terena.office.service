@@ -39,4 +39,6 @@ func BindCreate(m any) {
 
 func InitModels() {
 	InitUser()
+	InitAdmin()
+	InitRole()
 }
