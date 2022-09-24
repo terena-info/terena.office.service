@@ -7,6 +7,7 @@ import (
 	"github.com/bankonly/goginhandlers/src/configs"
 	"github.com/bankonly/goginhandlers/src/models"
 	"github.com/bankonly/goginhandlers/src/routers"
+	"github.com/bankonly/goutils/handler"
 	"github.com/bankonly/goutils/middlewares"
 	"github.com/bankonly/goutils/response"
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,15 @@ func main() {
 	app := gin.New()
 
 	app.Use(gin.Logger())
+
+	// Example with mongo transaction
+	app.GET("/example-mongo-transaction", handler.SessionHandler(func(hc handler.HandlerContext) {
+		// Whole Function Here
+		c := hc.Context
+		// MongoSessionContext := hc.SessionContext
+		res := response.New(c)
+		res.Success(response.H{})
+	}, configs.DBClient))
 
 	app.Use(gin.CustomRecovery(middlewares.ErrorRecovery))
 
