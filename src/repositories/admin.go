@@ -16,15 +16,18 @@ import (
 )
 
 type AdminInterface interface {
-	Login(string, string) // (Email, Password)
+	Login(string, string) string // (Email, Password)
+	SeedAdmin() string           // (Email, Password)
 	GenerateAccessToken(primitive.ObjectID) string
 	VerifyAccessToken(string) (models.Admin, error)
 	FindByID(primitive.ObjectID) models.Admin
+	FindOne(interface{}) (models.Admin, bool)
 	GetAuth(*gin.Context) models.Admin
 }
 
 type _AdminRepository struct{}
 
+// Get auth user from token
 func (repo _AdminRepository) GetAuth(c *gin.Context) models.Admin {
 	auth, ok := c.Get("auth")
 	if !ok {
@@ -34,6 +37,13 @@ func (repo _AdminRepository) GetAuth(c *gin.Context) models.Admin {
 	return adminData
 }
 
+func (repo _AdminRepository) FindOne(condition interface{}) (models.Admin, bool) {
+	var admin models.Admin
+	result := models.ADMIN_INSTANCE.FindOne(configs.DBContext(), condition)
+	err := result.Decode(&admin)
+	return admin, err == nil
+}
+
 func (repo _AdminRepository) FindByID(ID primitive.ObjectID) models.Admin {
 	var admin models.Admin
 	result := models.ADMIN_INSTANCE.FindOne(configs.DBContext(), bson.M{"_id": ID})
@@ -41,9 +51,22 @@ func (repo _AdminRepository) FindByID(ID primitive.ObjectID) models.Admin {
 	return admin
 }
 
-func (repo _AdminRepository) Login(email, password string) {
+func (repo _AdminRepository) Login(email, password string) string {
+	admin, exist := repo.FindOne(bson.M{"email": email})
+	if !exist {
+		utils.Panic(http.StatusBadRequest, utils.POption{Message: "Email or password is invalid", ErrorCode: "4000"})
+	}
+
+	err := bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(password))
+	if err != nil {
+		utils.Panic(http.StatusBadRequest, utils.POption{Message: "Email or password is invalid", ErrorCode: "4001"})
+	}
+
+	token := repo.GenerateAccessToken(admin.ID)
+	return token
 }
 
+// Verify access token
 func (repo _AdminRepository) VerifyAccessToken(token string) (models.Admin, error) {
 	payload := &models.AdminJWTPayload{}
 	var admin models.Admin

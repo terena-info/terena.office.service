@@ -19,10 +19,9 @@ type Admin struct {
 	Email        string `json:"email" bson:"email"`
 }
 
-type AdminOnCreate struct {
-	FullName string `json:"full_name" bson:"full_name"`
-	Password string `json:"password" bson:"password"`
-	Email    string `json:"email" bson:"email"`
+type AdminLogin struct {
+	Email    string `json:"email" form:"email" bson:"email"`
+	Password string `json:"password" form:"password" bson:"password"`
 }
 
 type AdminJWTPayload struct {
