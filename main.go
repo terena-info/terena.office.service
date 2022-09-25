@@ -27,8 +27,6 @@ func main() {
 		gin.SetMode(gin.DebugMode)
 	}
 
-	// userModel := models.RegisterUserModel()
-
 	app := gin.New()
 
 	app.Use(gin.Logger())
