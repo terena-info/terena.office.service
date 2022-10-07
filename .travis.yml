@@ -2,13 +2,6 @@ language: generic
 sudo: required
 services:
   - docker
-env:
-  - APP_ENV=production
-  - PORT=10001
-  - MONGO_URI=mongodb+srv://bank:Bank211998Tsc_@cluster0.ih5kz.mongodb.net/?retryWrites=true&w=majority
-  - MONGO_DATABASE_NAME=goginhandlers
-  - JWT_SECRET_KEY=JWT_SECRET_KEY
-  - JWT_EXPIRE_TIME=10000000
 
 deploy:
   provider: elasticbeanstalk
