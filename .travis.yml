@@ -23,7 +23,7 @@ script:
   - echo $JWT_EXPIRE_TIME
 
 before_deploy:
-  - ./env.sh
+  - sudo ./env.sh
 
 deploy:
   provider: elasticbeanstalk
