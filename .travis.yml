@@ -3,6 +3,9 @@ sudo: required
 services:
   - docker
 
+ignore:
+  - env.sh
+
 script:
   - echo "export APP_ENV=$APP_ENV" > env.sh
   - echo "export PORT=$PORT" >> env.sh
