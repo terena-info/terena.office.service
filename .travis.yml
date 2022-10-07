@@ -2,9 +2,13 @@ language: generic
 sudo: required
 services:
   - docker
-
-before_install:
-  - docker build -t bankonlyx3/goginhandler .
+env:
+  - APP_ENV="$APP_ENV"
+  - PORT="$PORT"
+  - MONGO_URI="$MONGO_URI"
+  - MONGO_DATABASE_NAME="$MONGO_DATABASE_NAME"
+  - JWT_SECRET_KEY="$JWT_SECRET_KEY"
+  - JWT_EXPIRE_TIME="$JWT_EXPIRE_TIME"
 
 deploy:
   provider: elasticbeanstalk
