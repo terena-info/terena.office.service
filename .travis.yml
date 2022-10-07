@@ -22,9 +22,6 @@ script:
   - echo $JWT_SECRET_KEY
   - echo $JWT_EXPIRE_TIME
 
-before_deploy:
-  - sudo ./env.sh
-
 deploy:
   provider: elasticbeanstalk
   region: "ap-southeast-1"
