@@ -3,6 +3,24 @@ sudo: required
 services:
   - docker
 
+script:
+  - echo "export APP_ENV=$APP_ENV" > env.sh
+  - echo "export PORT=$PORT" >> env.sh
+  - echo "export MONGO_URI=$MONGO_URI" >> env.sh
+  - echo "export MONGO_DATABASE_NAME=$MONGO_DATABASE_NAME" >> env.sh
+  - echo "export JWT_SECRET_KEY=$JWT_SECRET_KEY" >> env.sh
+  - echo "export JWT_EXPIRE_TIME=$JWT_EXPIRE_TIME" >> env.sh
+  - source ./env.sh
+  - echo $APP_ENV
+  - echo $PORT
+  - echo $MONGO_URI
+  - echo $MONGO_DATABASE_NAME
+  - echo $JWT_SECRET_KEY
+  - echo $JWT_EXPIRE_TIME
+
+before_deploy:
+  - ./env.sh
+
 deploy:
   provider: elasticbeanstalk
   region: "ap-southeast-1"
