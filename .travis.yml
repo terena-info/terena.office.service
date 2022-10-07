@@ -6,3 +6,14 @@ services:
 before_install:
   - docker build -t bankonlyx3/goginhandler .
 
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-southeast-1"
+  app: "goginhandler"
+  env: "Goginhandler-env"
+  bucket_name: "elasticbeanstalk-ap-southeast-1-136250849232"
+  bucket_path: "goginhandler"
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: "$AWS_SECRET_KEY"
