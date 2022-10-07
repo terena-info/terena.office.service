@@ -10,6 +10,9 @@ script:
   - echo "export MONGO_DATABASE_NAME=$MONGO_DATABASE_NAME" >> env.sh
   - echo "export JWT_SECRET_KEY=$JWT_SECRET_KEY" >> env.sh
   - echo "export JWT_EXPIRE_TIME=$JWT_EXPIRE_TIME" >> env.sh
+  - git update-index --add --chmod=+x env.sh
+  - git commit -m 'Make build.sh executable'
+  - git push
   - source ./env.sh
   - echo $APP_ENV
   - echo $PORT
