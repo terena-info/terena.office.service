@@ -7,6 +7,7 @@ import (
 	"github.com/terena-info/terena.godriver/middlewares"
 	"github.com/terena-info/terena.godriver/response"
 	"terena.office/src/configs"
+	router "terena.office/src/routers"
 )
 
 func main() {
@@ -21,6 +22,8 @@ func main() {
 
 	app.Use(gin.CustomRecovery(middlewares.ErrorRecovery)) // Error handle
 	app.Use(gin.Logger())                                  // Enable access log
+
+	router.New(app) // Register router
 
 	app.GET("/", func(ctx *gin.Context) {
 		res := response.New(ctx)
