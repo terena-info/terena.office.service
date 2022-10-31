@@ -11,7 +11,7 @@ EB_BUCKET=elasticbeanstalk-ap-southeast-1-136250849232
 VERSION="v11"
 ZIP="code.$VERSION.zip"
 
-aws configure set default.region ap-south-1
+aws configure set default.region ap-southeast-1
 
 # Zip up the Dockerrun file
 zip -r $ZIP cicd/docker.json
