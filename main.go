@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
+	gerrors "github.com/terena-info/terena.godriver/gerror"
 	"github.com/terena-info/terena.godriver/middlewares"
 	"github.com/terena-info/terena.godriver/response"
 	"terena.office/src/configs"
@@ -28,6 +30,10 @@ func main() {
 	app.GET("/", func(ctx *gin.Context) {
 		res := response.New(ctx)
 		res.Json(response.H{Message: "TerenaAPI"})
+	})
+
+	app.Use(func(ctx *gin.Context) {
+		gerrors.Panic(http.StatusNotFound, gerrors.E{Message: "API_NOT_FOUND"})
 	})
 
 	app.Run(fmt.Sprintf(":%s", configs.Env.PORT)) // Start port
