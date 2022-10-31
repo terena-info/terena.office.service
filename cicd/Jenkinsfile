@@ -12,11 +12,6 @@ pipeline {
                 sh 'echo $AWS_SECRET_KEY'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'echo "Testing"'
-            }
-        }
         stage('Publish') {
             steps {
                 sh 'echo "Publishing"'
@@ -24,8 +19,8 @@ pipeline {
             post {
                 success {
                     sh 'echo "Deploying to EB"'
-                    sh 'sudo chmod 775 ./deploy.sh'
-                    sh './deploy.sh'
+                    sh 'sudo chmod 775 ./cicd/deploy.sh'
+                    sh './cicd/deploy.sh'
                 }
             }
         }
