@@ -1,7 +1,7 @@
 {
     "AWSEBDockerrunVersion": "1",
     "Image": {
-      "Name": "bankonlyx3/terena.office",
+      "Name": "bankonlyx3/terena.office:v1",
       "Update": "true"
     },
     "Ports": [
