@@ -6,10 +6,9 @@
 application_name="terena.office.service"
 environment_name="Terenaofficeservice-env"
 
-EB_BUCKET=elasticbeanstalk-ap-southeast-1-136250849232
+EB_BUCKET=terena.office
 
 VERSION="v11"
-ZIP="code.$VERSION.zip"
 
 aws configure set default.region ap-southeast-1
 
