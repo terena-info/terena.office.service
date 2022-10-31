@@ -13,12 +13,6 @@ ZIP="code.$VERSION.zip"
 
 aws configure set default.region ap-southeast-1
 
-# Zip up the Dockerrun file
-zip -r $ZIP cicd/docker.json
-
-echo "Copying new zip to S3"
-aws s3 cp $ZIP s3://$EB_BUCKET/$ZIP
-
 # Create a new application version with the zipped up Dockerrun file
 echo "Creating new application version"
 aws elasticbeanstalk create-application-version --application-name $application_name \
