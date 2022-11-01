@@ -17,7 +17,7 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: bankonlyx3/terena.office
-          tag-custom: v2
+          tag-custom: v1.2
           tag-semver: |
             {{raw}}
       - name: Build and push
