@@ -1,50 +1,37 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# GitHub recommends pinning actions to a commit SHA.
-# To get a newer version, you will need to update the SHA.
-# You can also reference a tag or branch, but the action may change without warning.
-
-name: Publish Docker image
+name: Docker Image CI
 
 on: push
 jobs:
-  push_to_registries:
-    name: Push Docker image to multiple registries
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      - uses: actions/checkout@v2
         with:
-          username: bankonlyx3
-          password: ${{ secrets.DOCKER_HUB }}
+          lfs: "true"
+      - name: Build the Docker image
+        run: docker build -t bankonlyx3/terena.office -f Dockerfile .
+      - name: Generate Deployment Package
+        run: zip -r deploy.zip *
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GH_TOKEN }}
+          pattern: '[:\.]+'
+          string: "${{ steps.current-time.outputs.time }}"
+          replace-with: "-"
+          flags: "g"
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v14
         with:
-          images: |
-            bankonlyx3/terena.office.core
-            ghcr.io/${{ github.repository }}
-
-      - name: Build and push Docker images
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: terena.office.service
+          environment_name: Terenaofficeservice-env
+          version_label: "terena.office.service-${{ steps.format-time.outputs.replaced }}"
+          region: ap-southeast-1
+          deployment_package: deploy.zip
