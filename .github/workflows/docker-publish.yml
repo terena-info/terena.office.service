@@ -15,4 +15,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: bankonlyx3/terena.office.service:v1
+          tags: bankonlyx3/terena.office.service:latest
