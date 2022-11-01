@@ -13,7 +13,7 @@ jobs:
           username: bankonlyx3
           password: ${{ secrets.DOCKER_HUB }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Get Metadata of Tag and Label
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
