@@ -29,7 +29,7 @@ func main() {
 
 	app.GET("/", func(ctx *gin.Context) {
 		res := response.New(ctx)
-		res.Json(response.H{Message: "TerenaAPIAction"})
+		res.Json(response.H{Message: "TerenaAPIActionV2"})
 	})
 
 	app.Use(func(ctx *gin.Context) {
