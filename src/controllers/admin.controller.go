@@ -36,8 +36,11 @@ func (adaptor _AdminAdaptor) Login(ctx *gin.Context) {
 
 	binding.New(body).ValidateStruct().RunError(&binding.RunErrorOption{})
 
-	token := adaptor.adminRepo.Login(body.Email, body.Password)
-	res.Json(response.H{Data: token})
+	admin, token := adaptor.adminRepo.Login(body.Email, body.Password)
+
+	res.SetHeader("token", token)
+	res.SetCookie("token", token)
+	res.Json(response.H{Data: admin})
 }
 
 func (adapter _AdminAdaptor) Profile(ctx *gin.Context) {

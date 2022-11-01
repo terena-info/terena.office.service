@@ -20,7 +20,7 @@ import (
 type AdminRepositories interface {
 	FindById(primitive.ObjectID) models.Admin
 	FetchAllAdmins(*gin.Context, interface{})
-	Login(string, string) string
+	Login(string, string) (models.Admin, string)
 	_GenerateAccessToken(primitive.ObjectID) string
 	VerifyAccessToken(string) (models.Admin, error)
 	GetAuth(*gin.Context) models.Admin
@@ -51,7 +51,7 @@ type AdminJWTPayload struct {
 	jwt.RegisteredClaims
 }
 
-func (adaptor *_Adaptor) Login(email, password string) string {
+func (adaptor *_Adaptor) Login(email, password string) (models.Admin, string) {
 	var admin []models.Admin
 	adaptor.adminOrm.Match(bson.M{"email": email}).Decode(&admin).ErrorMessage(configs.ADMIN_NOT_FOUND)
 
@@ -60,7 +60,7 @@ func (adaptor *_Adaptor) Login(email, password string) string {
 	}
 
 	token := adaptor._GenerateAccessToken(admin[0].ID)
-	return token
+	return admin[0], token
 }
 
 func (adaptor *_Adaptor) _GenerateAccessToken(userId primitive.ObjectID) string {
@@ -85,18 +85,18 @@ func (adaptor *_Adaptor) _GenerateAccessToken(userId primitive.ObjectID) string 
 // Verify access token
 func (adaptor *_Adaptor) VerifyAccessToken(token string) (models.Admin, error) {
 	payload := &AdminJWTPayload{}
-	var admin []models.Admin
+	var admin models.Admin
 
 	tokenString, err := jwt.ParseWithClaims(token, payload, func(t *jwt.Token) (interface{}, error) {
 		return []byte(configs.Env.JWT_SECRET_KEY), nil
 	})
 
 	if err != nil {
-		return admin[0], errors.New("invalid_token")
+		return admin, errors.New("invalid_token")
 	}
 
 	if !tokenString.Valid {
-		return admin[0], errors.New("invalid_signature")
+		return admin, errors.New("invalid_signature")
 	}
 
 	adminData := adaptor.FindById(payload.UserId)
