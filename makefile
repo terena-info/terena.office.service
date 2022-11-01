@@ -9,5 +9,5 @@ docker.build:
 
 push:
 	git add .
-	git commit -m "$m"
+	git commit -m "$m:github"
 	git push
