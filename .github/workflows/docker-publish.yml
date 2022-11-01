@@ -22,5 +22,5 @@ jobs:
           application_name: terena.office.service
           environment_name: Terenaofficeservice-env
           version_label: "terena.office.service-v1"
-          region: ap-southeast-${{ APP_VERSION }}
+          region: ap-southeast-${{ env.APP_VERSION }}
           deployment_package: deploy.zip
