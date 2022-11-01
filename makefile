@@ -6,3 +6,8 @@ go.build:
 docker.build:
 	cd dist
 	docker build
+
+push:
+	git add .
+	git commit -m "$m"
+	git push
