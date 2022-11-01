@@ -4,9 +4,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Create version label
-        run: export APP_VERSION=$(date +'%Y-%m-%d-%s')
       - uses: actions/checkout@v2
+
+      - name: Create version label
+        run: echo "APP_VERSION=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
 
       - name: Build docker image
         run: docker build -t bankonlyx3/terena.office -f Dockerfile .
@@ -22,5 +23,5 @@ jobs:
           application_name: terena.office.service
           environment_name: Terenaofficeservice-env
           version_label: "terena.office.service-v1"
-          region: ap-southeast-${{ echo APP_VERSION }}
+          region: ap-southeast-${{ env.APP_VERSION }}
           deployment_package: deploy.zip
