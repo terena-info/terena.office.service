@@ -22,6 +22,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: terena.office.service
           environment_name: Terenaofficeservice-env
-          version_label: "terena.office.service-v1"
-          region: ap-southeast-${{ env.APP_VERSION }}
+          version_label: "terena.office.service-${{ env.APP_VERSION }}"
+          region: ap-southeast-1
           deployment_package: deploy.zip
