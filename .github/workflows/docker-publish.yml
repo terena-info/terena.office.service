@@ -8,8 +8,7 @@ jobs:
 
       - name: Create version label
         run: |
-          echo "APP_VERSION=$(echo $(date +'%Y-%m-%d-%s') | cut -c 1-6)" >> $GITHUB_ENV
-          echo ${{ env.APP_VERSION }}
+          echo "APP_VERSION=$(echo $(date +'%s') | cut -c 1-6)" >> $GITHUB_ENV
 
       - name: Build docker image
         run: docker build -t bankonlyx3/terena.office -f Dockerfile .
