@@ -1,8 +1,11 @@
+name: Build and Deploy
 on: push
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Create version label
+        run: export APP_VERSION=$(date +'%Y-%m-%d-%s')
       - uses: actions/checkout@v2
 
       - name: Build docker image
@@ -19,5 +22,5 @@ jobs:
           application_name: terena.office.service
           environment_name: Terenaofficeservice-env
           version_label: "terena.office.service-v1"
-          region: ap-southeast-1
+          region: ap-southeast-$APP_VERSION
           deployment_package: deploy.zip
