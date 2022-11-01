@@ -7,7 +7,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Create version label
-        run: echo "APP_VERSION=$(echo $(date +'%Y-%m-%d-%s') | cut -c 1-6)" >> $GITHUB_ENV
+        run: |
+          echo "APP_VERSION=$(echo $(date +'%Y-%m-%d-%s') | cut -c 1-6)" >> $GITHUB_ENV
+          echo $APP_VERSION
 
       - name: Build docker image
         run: docker build -t bankonlyx3/terena.office -f Dockerfile .
